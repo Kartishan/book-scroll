@@ -1,0 +1,55 @@
+.DS_Store
+*.log*
+/node_modules
+/build
+/target
+/.pnp
+.pnp.js
+/.vscode/
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Игнорирование файлов зависимостей
+/node_modules
+/.pnp
+.pnp.js
+
+# Игнорирование файлов тестирования
+/coverage
+
+# Игнорирование файлов производства
+/build
+
+# Игнорирование различных файлов
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Игнорирование файлов Spring
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Игнорирование файлов STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Игнорирование файлов NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/

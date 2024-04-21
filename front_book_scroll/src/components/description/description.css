@@ -1,0 +1,22 @@
+.bookDescription {
+    margin: 10px 0;
+    /*изначально было 200px*/
+    max-height: 100px;
+    overflow: hidden;
+}
+.bookDescription.full {
+    max-height: 100%;
+}
+.fullBookDescriptionBtn {
+    width: 155px;
+    margin: 10px auto;
+    cursor: pointer;
+    transition: 0.5s;
+    font-size: 16px;
+}
+.fullBookDescriptionBtn:hover {
+    transform: scale(1.2);
+}
+.bookDescriptionContainer {
+    margin-top: 20px;
+}

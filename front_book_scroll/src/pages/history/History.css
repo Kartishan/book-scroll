@@ -1,0 +1,85 @@
+.history-title {
+    color: #000;
+    font-family: Fira Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 20px 20px 50px 20px;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.history-content {
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.history-item {
+    margin-top: 40px;
+    display: flex;
+    width: 650px;
+    height: 300px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.history-item:hover {
+    transform: translateY(-5px);
+}
+
+.history-item-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.history-item-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 390px; /* Установить ширину, схожую с BookList */
+}
+
+.history-view-time {
+    font-size: 14px;
+    color: #757575; /* Выбран серый цвет для текста с датой */
+}
+
+.book-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.book-title {
+    font-size: 20px;
+    color: #000;
+    font-family: Fira Sans;
+    margin-bottom: 10px;
+}
+
+.book-details {
+    font-size: 14px;
+    color: #000;
+    font-family: Fira Sans;
+}
+
+.no-history {
+    font-size: 20px;
+    color: #000;
+    font-family: Fira Sans;
+    margin-top: 20px;
+    text-align: center;
+}

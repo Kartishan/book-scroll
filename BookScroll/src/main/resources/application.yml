@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: #path to postgres
+    username: #your username
+    password: #your password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    mongodb:
+      uri: #path to mongo
+
+application:
+  security:
+    jwt:
+      secret-key: #your secret key
+      expiration: #your time for access token
+      refresh-token:
+        expiration: #your time for refresh token

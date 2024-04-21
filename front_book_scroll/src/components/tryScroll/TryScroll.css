@@ -1,0 +1,25 @@
+.tryScrollMain{
+    border-radius: 15px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+}
+.tryScrollMain h1{
+    display: flex;
+    width: 521px;
+    margin-left: 50px;
+    padding-top: 40px;
+    color: #000;
+    font-family: Fira Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.tryScrollMain button{
+    margin-top: 50px;
+    margin-bottom: 20px;
+    width: 400px;
+    height: 80px;
+}

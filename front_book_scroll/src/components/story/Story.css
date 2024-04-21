@@ -1,0 +1,22 @@
+.storyDataContainer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
+.storyTextContainer {
+    margin: 20px;
+    height: 600px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.storyText {
+    padding: 20px;
+    height: 500px;
+    font-size: 20px;
+}
+.authorInfo {
+    display: flex;
+    margin-top: auto;
+}

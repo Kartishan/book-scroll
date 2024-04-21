@@ -1,0 +1,98 @@
+.SlaiderContainer{
+    width: 1400px;
+    height: 420px;
+    border-radius: 15px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    text-align: center;
+    margin-top: 80px;
+    display: block;
+    overflow: hidden;
+}
+.categoryName{
+    display: flex;
+    padding: 20px 20px 0px 20px;
+    color: #000;
+    font-family: Fira Sans;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    justify-content: space-between;
+}
+.categoryName p{
+    padding: 35px 0 0 0;
+    width: 40px;
+    color: #000;
+    font-family: Fira Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+}
+.slider {
+    overflow: hidden;
+}
+.categoryContent{
+    padding: 20px 20px;
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s ease;
+}
+.content{
+    cursor: pointer;
+    gap: 20px;
+}
+.categoryElement{
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+.categoryImage {
+    width: 200px;
+    height: 200px;
+    border: none;
+    border-radius: 15px;
+}
+
+.categoryImage img {
+    width: 100%;
+    height: 100%;
+    object-fit:inherit;
+    border-radius: 15px;
+}
+.categoryBookName{
+    max-width: 200px;
+    padding: 5px 0 0 0;
+    display: flex;
+    justify-content: center;
+}
+.categoryBookAuthor{
+    display: flex;
+    justify-content: center;
+}
+.sliderButton{
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: -5%;
+}
+
+.categoryHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.allButton {
+    cursor: pointer;
+    color: #000;
+    font-size: 20px;
+    padding: 20px 50px 0px 20px;
+    margin-left: auto;
+}

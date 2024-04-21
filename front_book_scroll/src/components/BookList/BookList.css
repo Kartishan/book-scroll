@@ -1,0 +1,81 @@
+.allBooksCategoryName{
+    color: #000;
+    font-family: Fira Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 20px 20px 50px 20px;
+}
+.bookByCategoryContainer{
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.bookByCategoryItem{
+    margin-top: 40px;
+    display: flex;
+    width: 650px;
+    height: 300px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+    grid-template-columns: 1fr 1fr;
+    cursor: pointer;
+}
+.bookByCategoryItem:hover {
+    transform: translateY(-5px);
+}
+.bookMark{
+    margin-top:-20px;
+    display: flex;
+    justify-content: right;
+    width: 23px;
+    height: 32px;
+    border: none;
+    float: right;
+}
+.bookMark.active{
+    background: rgb(255, 115, 0);
+}
+.leftBookByCategoryItem{
+    padding: 20px;
+}
+.rightBookByCategoryItem{
+    padding: 20px 20px 20px 0;
+    width: 390px;
+}
+.bookImageType1{
+    width: 200px;
+    height: 200px;
+    border: 1px solid gray;
+    background: grey;
+    border-radius: 15px
+}
+.bookName{
+    font-size: 20px;
+    padding-top: 20px;
+}
+.bookAuthor{
+    font-size: 14px;
+    padding-top: 10px;
+}
+.bookDescription{
+    font-size: 14px;
+    padding-top: 5px;
+    width: 390px;
+    height: 140px;
+    overflow: hidden;
+}
+.bookByCategoryContainerButtonContainer{
+    margin-top: 100px;
+    text-align: center;
+}
+.bookByCategoryContainerButton{
+    width: 400px;
+    height: 80px;
+}
+.viewTime {
+    font-size: 14px;
+    color: #757575; /* Выбран серый цвет для текста с датой */
+}

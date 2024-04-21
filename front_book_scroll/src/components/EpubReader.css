@@ -1,0 +1,99 @@
+.epubReaderContainer {
+    padding-top: 20px;
+    height: calc(100vh - 70px);
+    box-sizing: border-box;
+}
+
+.controlsArea {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 0 0 20px;
+    top: 0;
+    width: calc(100% - 40px);
+    box-sizing: border-box;
+}
+
+.pageInfo  {
+    align-self: center;
+}
+
+
+.readerArea {
+    width: 1400px;
+    height: calc(100% - 40px);
+    margin: 0 auto;
+    overflow-y: auto;
+    position: relative;
+}
+
+.selectionsArea {
+    position: fixed;
+    top: 0;
+    width: 280px;
+    height: 100%;
+    overflow-y: auto;
+    transition: right 0.3s;
+    border-left: 2px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+    opacity: 0;
+}
+.selectionsArea.open {
+    opacity: 1;
+    z-index: 9999999999;
+    right: 0;
+}
+
+
+.selectionsTitle {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.selection {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.selectionText {
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.selectionButton {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background-color: #efefef;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.selectionButton:hover {
+    background-color: #e0e0e0;
+}
+
+.toggleButton {
+    position: relative;
+    top: 0;
+    z-index: 20;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background-color: #efefef;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.toggleButton:hover {
+    background-color: #e0e0e0;
+}
+
+.hidden {
+    display: none;
+}

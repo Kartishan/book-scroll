@@ -1,0 +1,82 @@
+.storyScrollContainer {
+    display: flex;
+    margin: 30px auto;
+    border-radius: 15px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+    align-items: center;
+    text-align: left;
+    height: 800px;
+    width: 500px;
+}
+.storyContentContainer {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    height: 100%;
+    width: 100%;
+}
+
+.storyContentContainer.next {
+    animation: slideInFromNext 0.3s forwards;
+}
+
+.storyContentContainer.prev {
+    animation: slideInFromPrev 0.3s forwards;
+}
+@keyframes slideInFromNext {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromPrev {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+.storyButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    right: -100px;
+}
+
+.story-button {
+    background-color: transparent;
+    color: #333;
+    padding: 8px 16px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    user-select: none;
+}
+
+.story-button:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+.story-button:hover,
+.story-button:focus {
+    background-color: #ddd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.story-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
