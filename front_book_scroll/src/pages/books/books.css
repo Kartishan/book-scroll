@@ -6,7 +6,6 @@
     gap: 32px;
 }
 
-
 .categoryChoiceBtn{
     cursor: pointer;
     width: 200px;
@@ -25,7 +24,23 @@
     line-height: normal;
 }
 
+.categoryChoiceBtn:hover {
+    transform: scale(1.05);
+}
+
 .selectedCategory {
     background: #1D1A1A;
     color: #fff;
+}
+
+.expandCollapseButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    transition: transform 200s ease;
 }

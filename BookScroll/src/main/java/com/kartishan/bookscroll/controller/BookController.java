@@ -4,6 +4,7 @@ package com.kartishan.bookscroll.controller;
 import com.kartishan.bookscroll.model.Book;
 import com.kartishan.bookscroll.model.User;
 import com.kartishan.bookscroll.model.UserBookViewHistory;
+import com.kartishan.bookscroll.model.dto.BookWithCategoriesAndHistoryDTO;
 import com.kartishan.bookscroll.model.dto.BookWithCategoriesDTO;
 import com.kartishan.bookscroll.service.BookService;
 import com.kartishan.bookscroll.service.GridFsService;
@@ -48,6 +49,12 @@ public class BookController {
         BookWithCategoriesDTO bookWithCategory = bookService.getBookByIdWithCategory(id);
         addBookViewAndHistory(bookWithCategory.getId(), request);
         return ResponseEntity.ok().body(bookWithCategory);
+    }
+
+    @GetMapping("/bookFileId/{id}")
+    public ResponseEntity<String> getBookFileByIdWithCategory(@PathVariable UUID id, HttpServletRequest request) {
+        Book book = bookService.getBookById(id);
+        return ResponseEntity.ok().body(book.getFileId());
     }
 
     private void addBookViewAndHistory(UUID bookId, HttpServletRequest request) {
@@ -143,9 +150,21 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/history/{id}")
-    public ResponseEntity<List<UserBookViewHistory>> getUserHistory(@PathVariable UUID id) {
-        List<UserBookViewHistory> userHistory = bookService.getUserHistory(id);
+    @GetMapping("/history")
+    public ResponseEntity<List<BookWithCategoriesAndHistoryDTO>> getUserHistory(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        UUID UserId = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                UserId = user.getId();
+            }
+        }
+        List<BookWithCategoriesAndHistoryDTO> userHistory = bookService.getUserHistory(UserId);
         return ResponseEntity.ok(userHistory);
     }
 

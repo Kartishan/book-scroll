@@ -21,7 +21,7 @@ const Description = ({ description }) => {
 
     return (
         <div className="bookDescriptionContainer">
-            <div ref={descriptionRef} className={`bookDescription ${expanded ? 'full' : ''}`}>{description}</div>
+            <div ref={descriptionRef} className={`bookOriginalDescription ${expanded ? 'full' : ''}`}>{description}</div>
             {isOverflowing && <p className="fullBookDescriptionBtn" onClick={toggleDescription}>{expanded ? 'Свернуть описание' : 'Раскрыть описание'}</p>}
         </div>
     );

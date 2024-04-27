@@ -1,0 +1,72 @@
+.reviewsContainer{
+}
+
+.reviewElement {
+    width: 860px;
+    margin: 20px auto;
+    padding: 20px;
+    max-height: 200px;
+    min-height: 100px;
+    border-radius: 15px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+}
+
+.childReviewElement {
+    width: 800px;
+}
+
+.childCommentsContainer {
+    margin-left: 60px;
+}
+
+.replyForm {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.replyForm textarea {
+    margin-left: 110px;
+    width: 860px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    height: 80px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    resize: none;
+}
+
+.new-comment-form {
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.80);
+}
+
+.comment-button, .replyButton {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    align-self: start;
+}
+.comment-button-reply{
+    margin-left: 110px;
+}
+.new-comment-form textarea {
+    width: 95%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    height: 80px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    resize: none;
+}

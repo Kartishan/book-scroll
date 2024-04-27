@@ -9,7 +9,6 @@ import java.util.UUID;
 @Builder
 public class CommentRequest {
     UUID bookId;
-    UUID userId;
     String tittle;
     UUID parentCommentId;
 }

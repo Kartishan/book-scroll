@@ -10,11 +10,11 @@ const MyHeader = () => {
     const isAuth = useSelector(state => state.user.isAuth)
     const dispatch = useDispatch();
     const username = useSelector(state => state.user.currentUser?.username || '');
+
     const handleBookFound = (book) => {
-        console.log("tuuuts книга");
-        console.log(book);
         navigate(`/book/${book.id}`)
     };
+
     return (
         <div>
             <header className="header">
@@ -39,10 +39,21 @@ const MyHeader = () => {
                                 {/*Добавить перед История isAuth <3*/}
                                 {/*<li><a className="navbarLastItem" href="/history">История</a></li>*/}
                                 {/*<li><a className="navbarLastItem" href="/auth">Войти</a></li>*/}
-                                {isAuth && <li><button className="navbarLastItem navbarButton" onClick={() => navigate("/history")}>История</button> </li>}
-                                {isAuth && <li><button className="navbarLastItem navbarButton" onClick={() => navigate("/profile")}>{username}</button></li>}
+                                {isAuth && <li>
+                                    <button className="navbarLastItem navbarButton"
+                                            onClick={() => navigate("/history")}>История
+                                    </button>
+                                </li>}
+                                {isAuth && <li>
+                                    <button className="navbarLastItem navbarButton"
+                                            onClick={() => navigate("/profile")}>{username}</button>
+                                </li>}
 
-                                {!isAuth && <li><button className="navbarLastItem navbarButton" onClick={() => navigate("/auth")}>Войти</button></li>}
+                                {!isAuth && <li>
+                                    <button className="navbarLastItem navbarButton"
+                                            onClick={() => navigate("/auth")}>Войти
+                                    </button>
+                                </li>}
                             </ul>
                         </div>
                     </div>

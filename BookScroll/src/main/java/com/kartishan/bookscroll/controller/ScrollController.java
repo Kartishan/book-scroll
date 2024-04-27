@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,8 +31,23 @@ public class ScrollController {
     private final ScrollRecommendationService scrollRecommendationService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createScroll(@RequestBody ScrollRequest scrollRequest){
-        scrollService.createScroll(scrollRequest);
+    public ResponseEntity<?> createScroll(@RequestBody ScrollRequest scrollRequest,HttpServletRequest request){
+        String authorizationHeader = request.getHeader("Authorization");
+        UUID userId = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                userId = user.getId();
+            }
+        }
+
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User must be authenticated");
+        }
+        scrollService.createScroll(userId, scrollRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Scroll успешно создан");
     }
 
@@ -63,12 +79,24 @@ public class ScrollController {
             ex.printStackTrace();
         }
     }
-    @GetMapping("/recommendations/{userId}")
+    @GetMapping("/recommendations/")
     public ResponseEntity<List<ScrollDTO>> getPersonalizedScrolls(
-            @PathVariable UUID userId,
-            @RequestParam(defaultValue = "10") int limit) {
+            @RequestParam(defaultValue = "10") int limit,
+            HttpServletRequest request) {
 
-        List<ScrollDTO> personalizedScrolls = scrollRecommendationService.getPersonalizedScrolls(userId, limit);
+        String authorizationHeader = request.getHeader("Authorization");
+        List<ScrollDTO> personalizedScrolls=null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                personalizedScrolls = scrollRecommendationService.getPersonalizedScrolls(user.getId(), limit);
+            }
+        }
+
+//        List<ScrollDTO> personalizedScrolls = scrollRecommendationService.getPersonalizedScrolls(userId, limit);
 
         if (personalizedScrolls.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -76,7 +104,7 @@ public class ScrollController {
 
         return ResponseEntity.ok(personalizedScrolls);
     }
-    @PutMapping("/{scrollId}/like")
+    @PutMapping("/like/{scrollId}")
     public ResponseEntity<?> likeScroll(@PathVariable UUID scrollId, HttpServletRequest request) {
         try {
             String authorizationHeader = request.getHeader("Authorization");
@@ -85,9 +113,7 @@ public class ScrollController {
             }
             String token = authorizationHeader.substring(7);
             String username = jwtService.extractUsername(token);
-
             User user = userService.getUserByUsername(username);
-
             scrollService.likeScroll(user.getId(), scrollId);
 
             return ResponseEntity.noContent().build();
@@ -95,5 +121,20 @@ public class ScrollController {
             ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating book information: ");
         }
+    }
+    @GetMapping("/{scrollId}/like-status")
+    public ResponseEntity<Boolean> userLike(@PathVariable UUID scrollId, HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+
+        User user = userService.getUserByUsername(username);
+
+        scrollService.userLike(scrollId,user.getId());
+
+        return ResponseEntity.ok().body(scrollService.userLike(scrollId,user.getId()));
     }
 }

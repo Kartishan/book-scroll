@@ -20,4 +20,5 @@ public interface UserScrollLikeRepository extends JpaRepository<UserScrollLike, 
     Optional<UserScrollLike> findByUserAndScroll(User user, Scroll scroll);
 
     Optional<UserScrollLike> findByUserIdAndScrollId(UUID userId, UUID scrollId);
+
 }

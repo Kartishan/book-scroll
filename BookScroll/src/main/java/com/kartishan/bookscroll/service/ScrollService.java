@@ -42,16 +42,17 @@ public class ScrollService {
         return userScrollViewHistoryRepository.findAllByScroll_Id(scrollId);
     }
 
-    public Scroll createScroll(ScrollRequest scrollRequest) {
+    public void createScroll(UUID userId, ScrollRequest scrollRequest) {
         Book book = bookRepository.findById(scrollRequest.getBookId()).orElseThrow();
-        User user = userRepository.findById(scrollRequest.getUserId()).orElseThrow();
-
+        User user = userRepository.findById(userId).orElseThrow();
+        System.out.println(scrollRequest.getName());
         Scroll scroll = new Scroll();
         scroll.setName(scrollRequest.getName());
         scroll.setBook(book);
         scroll.setUser(user);
+        scroll.setCfiRange(scrollRequest.getCfiRange());
 
-        return scrollRepository.save(scroll);
+        scrollRepository.save(scroll);
     }
 
 
@@ -80,6 +81,7 @@ public class ScrollService {
         history.setViewTime(new Date());
         userScrollViewHistoryRepository.save(history);
     }
+
     public void likeScroll(UUID userId, UUID scrollId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
@@ -92,13 +94,19 @@ public class ScrollService {
                     UserScrollLike newUserScrollLike = new UserScrollLike();
                     newUserScrollLike.setUser(user);
                     newUserScrollLike.setScroll(scroll);
+                    newUserScrollLike.setLiked(false);
                     return newUserScrollLike;
                 });
 
-        userScrollLike.setLiked(true);
+        userScrollLike.setLiked(!userScrollLike.isLiked());
 
         userScrollLikeRepository.save(userScrollLike);
     }
+
+    public boolean userLike(UUID scrollId, UUID userId){
+        return userScrollLikeRepository.findByUserIdAndScrollId(userId, scrollId).get().isLiked();
+    }
+
     public ScrollDTO getScrollDTO(Scroll scroll) {
         ScrollDTO scrollDTO = ScrollDTO.builder()
                 .id(scroll.getId())

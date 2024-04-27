@@ -1,15 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import MyHeader from '../../components/header/MyHeader';
 import './StoryScroll.css'
 import Story from "../../components/story/Story";
 import unLike from "../../images/scroll/like.png";
-import fullLike from "../../images/scroll/likefull.png";
+import likeFull from  "../../images/scroll/likefull.png"
 import comments from "../../images/scroll/comment.png";
-import share from  "../../images/scroll/export.png";
+import share from "../../images/scroll/export.png";
 import goToBook from "../../images/scroll/goToBook.png";
 import {useNavigate} from "react-router-dom";
-import {API_URL} from "../../config";
+import {checkLikeStatus, fetchStories, putScrollLike} from "../../actions/scrollActions";
 
 
 const StoryScroll = () => {
@@ -19,20 +18,48 @@ const StoryScroll = () => {
     const [animation, setAnimation] = useState('');
     const navigate = useNavigate();
     const [offset, setOffset] = useState(0);
+    const [likeStatus, setLikeStatus] = useState({});
 
     useEffect(() => {
-        fetchStories(offset);
+        setIsLoading(true);
+        fetchStories(offset)
+            .then(newStories => {
+                setStories(prevStories => [...prevStories, ...newStories]);
+                setIsLoading(false);
+                return newStories;
+            })
+            .then(newStories => {
+                newStories.forEach(story => {
+                    checkLikeStatus(story.id)
+                        .then(isLiked => {
+                            setLikeStatus(prevLikeStatus => ({
+                                ...prevLikeStatus,
+                                [story.id]: isLiked
+                            }));
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при проверке лайка:', error);
+                        });
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке данных:', error);
+                setIsLoading(false);
+            });
     }, [offset]);
 
-    const fetchStories = async (newOffset) => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get(`${API_URL}api/scroll/recommendations/86a17475-f4b3-4a35-a613-41efa0638ec2?limit=10&offset=${newOffset}`);
-            setStories(prevStories => [...prevStories, ...response.data]);
-            setIsLoading(false);
-        } catch (error) {
-            console.error('Ошибка при загрузке данных:', error);
-            setIsLoading(false);
+    const handleLikeClick = async () => {
+        if (stories.length > 0) {
+            const scrollId = stories[currentStoryIndex].id;
+            try {
+                const response = await putScrollLike(scrollId);
+                setLikeStatus(prevLikeStatus => ({
+                    ...prevLikeStatus,
+                    [scrollId]: !prevLikeStatus[scrollId]
+                }));
+            } catch (error) {
+                console.error('Ошибка при отправке лайка:', error);
+            }
         }
     };
 
@@ -41,16 +68,19 @@ const StoryScroll = () => {
         setTimeout(() => {
             if (direction === 'next' && newIndex === stories.length) {
                 setOffset(prevOffset => prevOffset + stories.length);
-                newIndex = 0; // Сбрасываем индекс, чтобы истории отображались с начала новой загруженной порции
+                newIndex = 0;
             }
             setCurrentStoryIndex(newIndex);
             setAnimation('');
-        }, 500); // Это значение должно совпадать с продолжительностью вашей CSS анимации
+        }, 500);
     };
 
     const fetchNextStory = () => {
         const newIndex = (currentStoryIndex + 1) % stories.length;
         changeStory(newIndex, 'next');
+        if (newIndex === stories.length - 1) {
+            setOffset(prevOffset => prevOffset + stories.length);
+        }
     };
 
     const fetchPreviousStory = () => {
@@ -69,16 +99,19 @@ const StoryScroll = () => {
             </div>
 
             <div className="storyButtonsContainer">
-                {currentStoryIndex !== 0 &&
-                    (<button onClick={fetchPreviousStory} className="story-button">▲</button>)}
-                <button className="story-button"><img src={unLike} alt="лайк" /></button>
+                {currentStoryIndex !== 0 && (<button onClick={fetchPreviousStory} className="story-button">▲</button>)}
+                {stories.length > 0 && (
+                    <button className="story-button" onClick={handleLikeClick}>
+                        <img src={likeStatus[stories[currentStoryIndex].id] ? likeFull : unLike} alt="лайк"/>
+                    </button>
+                )}
                 <button className="story-button" onClick={() => handleGoToBook(stories[currentStoryIndex].bookId)}>
                     <img src={goToBook} alt="Перейти к книге"/>
                 </button>
                 <button className="story-button"><img src={comments} alt="Комментарии"/></button>
                 <button className="story-button"><img src={share} alt="Поделиться"/></button>
-                {currentStoryIndex !== stories.length - 1 &&
-                    (<button onClick={fetchNextStory} className="story-button">▼</button>)}
+                {currentStoryIndex !== stories.length - 1 && (
+                    <button onClick={fetchNextStory} className="story-button">▼</button>)}
             </div>
         </div>
     </div>)

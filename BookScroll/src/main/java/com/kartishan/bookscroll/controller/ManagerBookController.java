@@ -21,7 +21,6 @@ import java.util.UUID;
 @RequestMapping("/api/manager/book")
 @RequiredArgsConstructor
 public class ManagerBookController {
-    private final BookService bookService;
     private final ManagerBookService managerBookService;
 
     @Operation(      summary = "Метод для полкчения книги по Id",

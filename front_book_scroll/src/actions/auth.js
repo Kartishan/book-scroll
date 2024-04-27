@@ -2,17 +2,22 @@ import axios from 'axios'
 import {setUser} from "../reducers/userReducer";
 import {API_URL} from "../config";
 
-export const registration = async (email, username, password) => {
-    try {
-        const response = await axios.post(`${API_URL}api/auth/register`, {
-            username,
-            email,
-            password
-        })
-    } catch (e) {
-        console.log(e.response);
-    }
-}
+export const registration = (email, username, password) => {
+    return async dispatch => {
+        try {
+            const response = await axios.post(`${API_URL}api/auth/signup`, {
+                username,
+                email,
+                password
+            });
+            localStorage.setItem('token', response.data.access_token)
+            localStorage.setItem('refreshToken',response.data.refresh_token)
+            dispatch(auth());
+        } catch (e) {
+            console.log(e.response.data);
+        }
+    };
+};
 
 export const login =  (username, password) => {
     return async dispatch => {
@@ -21,9 +26,12 @@ export const login =  (username, password) => {
                 username,
                 password
             })
-            dispatch(setUser(response.data.user))
+            localStorage.removeItem('token')
+            localStorage.removeItem('refreshToken')
             localStorage.setItem('token', response.data.access_token)
             localStorage.setItem('refreshToken',response.data.refresh_token)
+            dispatch(auth());
+
         } catch (e) {
 
         }
@@ -39,6 +47,7 @@ export const auth = () => {
             return;
         }
         try {
+            console.log(localStorage.getItem('token'))
             const response = await axios.get(`${API_URL}api/auth/authenticate-from-token`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
@@ -65,6 +74,8 @@ const refreshToken = async () => {
         localStorage.setItem('token', response.data.access_token);
         return response.data.access_token;
     } catch (e) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
         console.error(e);
     }
 };

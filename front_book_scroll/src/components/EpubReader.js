@@ -4,40 +4,107 @@ import { useParams } from 'react-router-dom';
 import "./EpubReader.css";
 import MyHeader from "./header/MyHeader";
 import {API_URL} from "../config";
+import {createBookmark, deleteBookmark, getBookmarks} from "../actions/bookActions";
+import {postStories} from "../actions/scrollActions";
+import axios from "axios";
 
 const EpubReader = () => {
     const { bookId } = useParams();
-    const bookUrl = `${API_URL}api/book/files/${bookId}`;
     const [selections, setSelections] = useState([]);
     const [rendition, setRendition] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [isMakingBookmarks, setIsMakingBookmarks] = useState(true);
+    const [fileId, setFileId] = useState(null);
 
-    const handleTextSelected = useCallback((cfiRange, contents) => {
+    const updateHighlights = async () => {
+        console.log("Я сработал")
+        if (rendition) {
+            selections.forEach(selection => {
+                rendition.annotations.remove(selection.cfiRange, 'highlight');
+            });
+
+            selections.forEach(selection => {
+                rendition.annotations.add('highlight', selection.cfiRange, {}, (e) => {}, 'hl', {
+                    'fill': 'yellow', 'fill-opacity': '0.3', 'mix-blend-mode': 'multiply'
+                });
+            });
+        }
+    };
+
+    const handleTextSelected = useCallback(async (cfiRange, contents) => {
+        if (!isMakingBookmarks) return;
         const selectedText = rendition.getRange(cfiRange).toString();
         setSelections(prevSelections => [
             ...prevSelections,
-            { text: selectedText, cfiRange: cfiRange }
+            { text: selectedText, cfiRange }
         ]);
-        rendition.annotations.add('highlight', cfiRange, {}, null, 'hl', {
-            'fill': 'yellow', 'fill-opacity': '0.3', 'mix-blend-mode': 'multiply'
-        });
+        try {
+            const savedBookmark = await createBookmark(bookId, cfiRange, selectedText);
+            console.log('Закладка сохранена:', savedBookmark);
+            await loadBookmarks();
+        } catch (error) {
+            console.error('Не удалось сохранить закладку:', error);
+        }
         contents.window.getSelection().removeAllRanges();
-    }, [rendition]);
+    }, [rendition, isMakingBookmarks, bookId]);
+
+    useEffect(() => {
+        const fetchFileId = async () => {
+            try {
+                console.log(bookId)
+                const response = await axios.get(`${API_URL}api/book/bookFileId/${bookId}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                setFileId(response.data);
+            } catch (error) {
+                console.error('Ошибка при получении fileId:', error);
+            }
+        };
+
+        fetchFileId();
+    }, );
+
+    const bookUrl = fileId ? `${API_URL}api/book/files/${fileId}` : '';
+
 
     useEffect(() => {
         if (rendition) {
             rendition.on('selected', handleTextSelected);
+            updateHighlights();
             return () => rendition.off('selected', handleTextSelected);
         }
-    }, [rendition, handleTextSelected]);
+    }, [rendition, handleTextSelected, selections, updateHighlights]);
 
-    const removeSelection = useCallback((cfiRange, index) => {
-        if (rendition) {
-            rendition.annotations.remove(cfiRange, 'highlight');
-            setSelections(selections.filter((_, i) => i !== index));
+    useEffect(() => {
+        loadBookmarks();
+    }, [bookId]);
+
+    const loadBookmarks = async () => {
+        try {
+            console.log(bookId)
+            const bookmarks = await getBookmarks(bookId);
+            setSelections(bookmarks);
+        } catch (error) {
+            console.error('Не удалось загрузить закладки:', error);
         }
-    }, [rendition, selections]);
+    };
+
+    const removeSelection = useCallback(async (bookmarkId) => {
+        if (rendition) {
+            const selection = selections.find(s => s.id === bookmarkId);
+            if (selection) {
+                rendition.annotations.remove(selection.cfiRange, 'highlight', selection.id);
+            }
+
+            try {
+                await deleteBookmark(bookmarkId);
+                await loadBookmarks();
+            } catch (error) {
+                console.error('Не удалось удалить закладку:', error);
+            }
+        }
+    }, [rendition, selections, loadBookmarks]);
 
     const handleRendition = useCallback((rend) => {
         setRendition(rend);
@@ -53,6 +120,16 @@ const EpubReader = () => {
         setIsSelectionsPanelOpen(!isSelectionsPanelOpen);
     };
 
+    const handleCreateScroll = async (text, cfiRange, bookId) => {
+        try {
+            console.log(bookId)
+            const result = await postStories(bookId, cfiRange, text);
+            console.log('Scroll создан:', result);
+        } catch (error) {
+            console.error('Ошибка при создании scroll:', error);
+        }
+    };
+
     return (
         <div>
             <MyHeader/>
@@ -61,6 +138,9 @@ const EpubReader = () => {
                     <div className="pageInfo">
                         Страница {currentPage} / {totalPages} в главе.
                     </div>
+                    <button onClick={() => setIsMakingBookmarks(!isMakingBookmarks)} className="toggleButton">
+                        {isMakingBookmarks ? 'Отключить создание закладок' : 'Включить создание закладок'}
+                    </button>
                     <button onClick={toggleSelectionsPanel} className="toggleButton">
                         {isSelectionsPanelOpen ? 'Скрыть закладки' : 'Показать закладки'}
                     </button>
@@ -82,8 +162,11 @@ const EpubReader = () => {
                             <button onClick={() => rendition.display(selection.cfiRange)}
                                     className="selectionButton">Перейти
                             </button>
-                            <button onClick={() => removeSelection(selection.cfiRange, index)}
+                            <button onClick={() => removeSelection(selection.id, index)}
                                     className="selectionButton">Удалить
+                            </button>
+                            <button onClick={() => handleCreateScroll(selection.text, selection.cfiRange, bookId)}
+                                    className="selectionButton">Создать Scroll
                             </button>
                         </div>
                     ))}

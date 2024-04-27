@@ -19,6 +19,8 @@ public class Scroll {
 
     private String name;
 
+    private String cfiRange;
+
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;

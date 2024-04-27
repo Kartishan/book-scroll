@@ -1,10 +1,9 @@
-.bookDescription {
+.bookOriginalDescription {
     margin: 10px 0;
-    /*изначально было 200px*/
-    max-height: 100px;
+    max-height: 200px;
     overflow: hidden;
 }
-.bookDescription.full {
+.bookOriginalDescription.full {
     max-height: 100%;
 }
 .fullBookDescriptionBtn {

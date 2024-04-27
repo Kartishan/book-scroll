@@ -48,8 +48,6 @@
 .bookImageType1{
     width: 200px;
     height: 200px;
-    border: 1px solid gray;
-    background: grey;
     border-radius: 15px
 }
 .bookName{
@@ -72,10 +70,17 @@
     text-align: center;
 }
 .bookByCategoryContainerButton{
+    display: block;
     width: 400px;
     height: 80px;
+    margin: 30px auto;
 }
 .viewTime {
     font-size: 14px;
-    color: #757575; /* Выбран серый цвет для текста с датой */
+    color: #757575;
+}
+
+.history-view-time {
+    font-size: 14px;
+    color: #757575;
 }

@@ -26,10 +26,13 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/book/**",
-            "/api/comments/",
+            "/api/comments/**",
             "/api/image/**",
             "/api/category/**",
-            "/api/scroll/**"
+            "/api/scroll/**",
+            "/api/preference/**",
+            "/api/bookmarks/**",
+            "/api/recommendation/forBook/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

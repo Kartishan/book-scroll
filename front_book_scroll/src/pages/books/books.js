@@ -6,9 +6,12 @@ import BookList from "../../components/BookList/BookList";
 import {API_URL} from "../../config";
 
 const Books = () => {
+    const MAX_VISIBLE_CATEGORIES = 12; // Максимальное количество категорий, показываемых по умолчанию
+
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [books, setBooks] = useState([]); // Добавлено состояние для книг
+    const [books, setBooks] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false); // состояние для отслеживания, раскрыт ли список полностью
 
     useEffect(() => {
         fetchCategories();
@@ -30,15 +33,14 @@ const Books = () => {
     };
 
     const fetchBooks = async (category = '') => {
-        let url = 'http://localhost:8080/api/book/all';
+        let url = `${API_URL}api/book/all`;
         if (category) {
-            // Категория есть, используем URL для фильтрации по категории
-            url = `http://localhost:8080/api/book/category/${encodeURIComponent(category)}`;
+            url = `${API_URL}api/book/category/${encodeURIComponent(category)}`;
         }
         try {
             const response = await fetch(url);
             const data = await response.json();
-            setBooks(data.content); // Предполагаем, что `data` содержит объект `Page`. Иначе просто `setBooks(data)`.
+            setBooks(data.content);
         } catch (error) {
             console.error('Error fetching books:', error);
         }
@@ -48,11 +50,13 @@ const Books = () => {
         setSelectedCategory(prevCategory => prevCategory === category ? '' : category);
     };
 
+    const visibleCategories = isExpanded ? categories : categories.slice(0, MAX_VISIBLE_CATEGORIES);
+
     return (
         <div>
-            <MyHeader></MyHeader>
+            <MyHeader/>
             <div className="booksCategoryChoiceContainer">
-                {categories.map((category, index) => (
+                {visibleCategories.map((category, index) => (
                     <button
                         key={index}
                         className={`categoryChoiceBtn ${category === selectedCategory ? 'selectedCategory' : ''}`}
@@ -62,8 +66,16 @@ const Books = () => {
                     </button>
                 ))}
             </div>
-            <BookList books={books} />
-            <MyFooter></MyFooter>
+            {categories.length > MAX_VISIBLE_CATEGORIES && (
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className={`expandCollapseButton ${isExpanded ? 'expanded' : ''}`}
+                >
+                    {isExpanded ? 'Свернуть' : 'Раскрыть все'}
+                </button>
+            )}
+            <BookList books={books}/>
+            <MyFooter/>
         </div>
     );
 };

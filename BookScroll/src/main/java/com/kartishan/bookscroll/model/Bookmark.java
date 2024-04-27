@@ -1,7 +1,10 @@
 package com.kartishan.bookscroll.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -9,27 +12,27 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comment")
 @Entity
-public class Comment {
+@Table(name = "bookmark")
+public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @NonNull
-    @Column(length = 1000)
-    private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @NonNull
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    @NonNull
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
+    @Column(nullable = false)
+    private String cfiRange;
+
+    @Column(nullable = false, length = 1000)
+    private String text;
+
+    @Column(length = 1000)
+    private String comment;
 }

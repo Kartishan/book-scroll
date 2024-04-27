@@ -12,11 +12,13 @@ p {
     font-size: 20px;
     font-weight: 400;
 }
+.midlBookElement{
+    width: 860px;
+}
 .bookImageBig {
     width: 300px;
     height: 400px;
-    border: 1px solid gray;
-    background: red;
+    background: gray;
     border-radius: 15px;
     object-fit: inherit;
 }
@@ -26,50 +28,10 @@ p {
     height: 60px;
     font-size: 20px;
 }
-.bookDescription {
-    margin-top: 10px;
-    max-height: 200px;
-    overflow: hidden;
-}
-.bookDescription.full {
-    max-height: 100%;
-}
-/*.fullBookDescriptionBtn {*/
-/*    width: 155px;*/
-/*    margin: 10px auto;*/
-/*    cursor: pointer;*/
-/*    transition: 0.5s;*/
-/*    font-size: 16px;*/
-/*}*/
-.fullBookDescriptionBtn:hover {
-    transform: scale(1.2);
-}
-/*.bookDescriptionContainer {*/
-/*    justify-content: center;*/
-/*    text-align: center;*/
-/*}*/
 .bookAuthorHeader {
     margin-top: 10px;
 }
-/*.bookDescriptionHeader {*/
-/*    margin-top: 10px;*/
-/*}*/
-.reviewsContainer {
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
-}
-.rewiewElement {
-    margin-top: 100px;
-    width: 860px;
-    margin: 20px auto;
-    padding: 20px;
-    max-height: 200px;
-    min-height: 100px;
-    border-radius: 15px;
-    box-shadow: 1px 5px 50px 5px rgba(217, 217, 217, 0.8);
-}
+
 .bookRaitingContainer {
     display: flex;
     align-items: center;

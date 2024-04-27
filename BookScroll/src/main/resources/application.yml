@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: #path to postgres
+    url: jdbc:postgresql://localhost:5432/scroll_book
     username: #your username
     password: #your password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:
@@ -15,12 +15,12 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   data:
     mongodb:
-      uri: #path to mongo
+      uri: mongodb://localhost:27017/scroll_mongo_files
 
 application:
   security:
     jwt:
-      secret-key: #your secret key
-      expiration: #your time for access token
+      secret-key: 426f6f6b5363726f6c6c4973436f6f6c4b617274697368616e
+      expiration: 86400000
       refresh-token:
-        expiration: #your time for refresh token
+        expiration: 604800000

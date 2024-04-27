@@ -1,34 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import "./bookDetaileCss.css";
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
 import MyHeader from "../../components/header/MyHeader";
 import MyFooter from "../../components/footer/MyFooter";
 import Description from "../../components/description/Description";
 import {API_URL} from "../../config";
+import BookComments from "../../components/bookComments/BookComments";
+import Rating from "./raiting";
+import {fetchBookDetails, getBookSimilar} from "../../actions/bookActions";
+import BookSlider from "../../components/slider/BookSlider";
 
 
 const BookDetails = () => {
     const [book, setBook] = useState(null);
     const { bookId } = useParams();
     const navigate = useNavigate();
+    const [recommendations, setRecommendations] = useState([]);
 
     const handleReadOnline = () => {
-        navigate(`/read/${"6620100c7c65a6004744c23a"}`);
+        console.log(bookId)
+        navigate(`/read/${bookId}`);
     };
 
     useEffect(() => {
-        const getBook = async () => {
-            try {
-                const response = await axios.get(`${API_URL}api/book/${bookId}`);
-                console.log(response.data);
-                setBook(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getBook();
+        fetchBookDetails(bookId)
+            .then(data => {
+                setBook(data);
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке книги:', error);
+            });
+        getBookSimilar(bookId)
+            .then(data => {
+                setRecommendations(data);
+            })
+            .catch(error => {
+                console.error('Ошибка при получении рекомендаций:', error);
+            });
     }, [bookId]);
 
     return (
@@ -41,36 +49,34 @@ const BookDetails = () => {
                             <img className="bookImageBig" src={`${API_URL}api/image/${bookId}`} alt={book.title}/>
                             <div>
                                 <div className="bookRaitingContainer">
-                                    <p id="bookRaiting">Рейтинг: {book.rating}</p>
-                                    <img id="starImage" src="./images/Star.png" alt=""/>
+                                    <p id="bookRaiting">Рейтинг: </p>
+                                    <Rating
+                                        bookId={bookId}
+                                        currentRate={book.rating}
+                                    />
                                 </div>
-                                <p id="pageCount">Страниц: {book.pageCount}</p>
                             </div>
                         </div>
 
                         <div className="midlBookElement">
                             <h2>Название</h2>
-                            <p id="bookName">{book.name}</p>
+                            <p >{book.name}</p>
                             <h2 className="bookAuthorHeader">Автор</h2>
-                            <p id="bookAuthor">{book.author}</p>
-                            <h2 className="bookDescriptionHeader">Категория</h2>
-                            <p id="bookCategory">{book.category}</p>
+                            <p >{book.author}</p>
+                            <h2 className="bookAuthorHeader">Категория</h2>
+                            <p>{book.categories}</p>
                             <Description description={book.description}/>
-                            {/*<p id="bookDescription" className="bookDescription">{book.description}</p>*/}
-                            {/*<p id="fullBookDescriptionBtn" className="fullBookDescriptionBtn">Раскрыть описание</p>*/}
                         </div>
                         <div className="rightBookElement">
-                            <h2 id="bookPrice">{book.price}</h2>
-                            {/*<button className="buttonStyle bookButton">Купить книгу</button>*/}
-                            {/*<button className="buttonStyle bookButton">Забронировать</button>*/}
                             <button className="buttonStyle bookButton" onClick={handleReadOnline}>Читать онлайн</button>
-                            {/*<p id="bookSell">Кол-во книг для покупки: {book.sellCount}</p>*/}
-                            {/*<p id="bookRent">Кол-во книг для брони: {book.rentCount}</p>*/}
+                            <p id="pageCount">Страниц: {book.pageCount}</p>
                         </div>
                     </section>
                 )}
-                <section className="reviewsContainer">
-                </section>
+                {book && recommendations.length > 0 && (
+                    <BookSlider books={recommendations} categoryName="Похожие книги" />
+                )}
+                <BookComments bookId={bookId}></BookComments>
             </main>
             <MyFooter></MyFooter>
         </div>

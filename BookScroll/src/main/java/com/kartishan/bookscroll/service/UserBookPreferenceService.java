@@ -10,6 +10,7 @@ import com.kartishan.bookscroll.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class UserBookPreferenceService {
                 .mapToInt(UserBookPreference::getRating)
                 .average();
     }
+    @Transactional
     public void updateUserBookPreference(UUID userId, UUID bookId, int rating) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Book not found"));

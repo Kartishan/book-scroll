@@ -1,0 +1,25 @@
+.rating span {
+    cursor: pointer;
+    font-size: 25px;
+    color: gold;
+}
+.filled {
+    color: gold;
+}
+
+.empty {
+    color: gold;
+}
+
+span {
+    font-size: 20px;
+    margin: 0 2px;
+}
+
+.rating span.filled {
+    color: orange;
+}
+
+.rating span.empty {
+    color: grey;
+}

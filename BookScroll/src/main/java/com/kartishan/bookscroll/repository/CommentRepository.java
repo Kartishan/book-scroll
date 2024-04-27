@@ -10,7 +10,6 @@ import java.util.UUID;
 
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
     Optional<Comment> findById(UUID id);
-    List<Comment> findByBook(Book book);
     List<Comment> findAllCommentsByParentComment(Comment parentComment);
-
+    List<Comment> findByBookId(UUID bookId);
 }

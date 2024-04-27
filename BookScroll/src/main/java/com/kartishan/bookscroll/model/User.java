@@ -37,9 +37,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Token> tokens;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserBookPreference> preferences;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

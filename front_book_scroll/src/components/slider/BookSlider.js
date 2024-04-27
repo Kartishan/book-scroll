@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./BookSlider.css";
 import {API_URL} from "../../config";
 
-const BookSlider = ({ books, categoryName }) => { // Теперь принимаем books и categoryName в props
+const BookSlider = ({ books, categoryName }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const navigate = useNavigate();
 
@@ -27,11 +27,15 @@ const BookSlider = ({ books, categoryName }) => { // Теперь принима
         <div className="SlaiderContainer">
             <div className="categoryHeader">
                 <h2 className="categoryName">{categoryName}</h2>
-                <p className="allButton" onClick={handleAllBooks}>Все ></p>
+                {books.length > 9 && (
+                    <p className="allButton" onClick={handleAllBooks}>Все ></p>
+                )}
             </div>
             <div className="slider">
                 <div className="categoryContent">
-                    <button className="sliderButton" onClick={handlePrev}>&lt;</button>
+                    {currentIndex > 0 && (
+                        <button className="sliderButton" onClick={handlePrev}>&lt;</button>
+                    )}
                     {books.slice(currentIndex, currentIndex + 6).map((item) => (
                         <div className="content" key={item.id} onClick={() => handleClick(item.id)}>
                             <img src={`${API_URL}api/image/${item.id}`} className="categoryImage"
@@ -40,7 +44,9 @@ const BookSlider = ({ books, categoryName }) => { // Теперь принима
                             <p className="categoryBookAuthor">{item.author}</p>
                         </div>
                     ))}
-                    <button className="sliderButton" onClick={handleNext}>&gt;</button>
+                    {currentIndex < books.length - 6 && (
+                        <button className="sliderButton" onClick={handleNext}>&gt;</button>
+                    )}
                 </div>
             </div>
         </div>
