@@ -10,6 +10,7 @@ import com.kartishan.bookscroll.service.jwt.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,16 @@ public class AuthenticationController {
     )
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(service.register(request));
+            @RequestBody RegisterRequest request, HttpServletResponse response) {
+        AuthenticationResponse authResponse = service.register(request);
+
+        Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+
+        response.addCookie(refreshTokenCookie);
+
+        return ResponseEntity.ok(new AuthenticationResponse(authResponse.getAccessToken(), null));
     }
     @Operation(
             summary = "Метод для входа пользователя",
@@ -41,9 +49,16 @@ public class AuthenticationController {
     )
     @PostMapping("/signin")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
-    ) {
-        return ResponseEntity.ok(service.authenticate(request));
+            @RequestBody AuthenticationRequest request, HttpServletResponse response) {
+        AuthenticationResponse authResponse = service.authenticate(request);
+
+        Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+
+        response.addCookie(refreshTokenCookie);
+
+        return ResponseEntity.ok(new AuthenticationResponse(authResponse.getAccessToken(), null) );
     }
     @Operation(
             summary = "Метод для обновления access токена",

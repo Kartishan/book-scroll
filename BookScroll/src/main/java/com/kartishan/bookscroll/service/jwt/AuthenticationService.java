@@ -12,6 +12,7 @@ import com.kartishan.bookscroll.request.RegisterRequest;
 import com.kartishan.bookscroll.response.AuthenticationResponse;
 import com.kartishan.bookscroll.response.AuthenticationTokenResponse;
 import com.kartishan.bookscroll.service.jwt.JwtService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -95,29 +96,36 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String username;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String refreshToken = null;
+        String username = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refresh_token".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
         }
-        refreshToken = authHeader.substring(7);
-        username = jwtService.extractUsername(refreshToken);
-        if (username != null) {
+
+        if (refreshToken != null) {
+            username = jwtService.extractUsername(refreshToken);
+        }
+
+        if (username != null && refreshToken != null) {
             var user = this.userRepository.findByUsername(username)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
+
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
-                        .refreshToken(refreshToken)
                         .build();
+                response.setContentType("application/json");
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }

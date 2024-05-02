@@ -1,6 +1,6 @@
-import axios from 'axios'
-import {setUser} from "../reducers/userReducer";
-import {API_URL} from "../config";
+import axios from 'axios';
+import { setUser } from "../reducers/userReducer";
+import { API_URL } from "../config";
 
 export const registration = (email, username, password) => {
     return async dispatch => {
@@ -10,86 +10,72 @@ export const registration = (email, username, password) => {
                 email,
                 password
             });
-            localStorage.setItem('token', response.data.access_token)
-            localStorage.setItem('refreshToken',response.data.refresh_token)
+            localStorage.setItem('token', response.data.access_token);
             dispatch(auth());
         } catch (e) {
-            console.log(e.response.data);
+            console.log(e.response?.data);
         }
     };
 };
 
-export const login =  (username, password) => {
+export const login = (username, password) => {
     return async dispatch => {
         try {
             const response = await axios.post(`${API_URL}api/auth/signin`, {
                 username,
                 password
-            })
-            localStorage.removeItem('token')
-            localStorage.removeItem('refreshToken')
-            localStorage.setItem('token', response.data.access_token)
-            localStorage.setItem('refreshToken',response.data.refresh_token)
-            dispatch(auth());
-
-        } catch (e) {
-
-        }
-    }
-}
-
-export const auth = () => {
-    return async dispatch => {
-
-        const token_access = localStorage.getItem('token');
-        const token_refreshToken = localStorage.getItem('refreshToken');
-        if (!token_access || !token_refreshToken) {
-            return;
-        }
-        try {
-            console.log(localStorage.getItem('token'))
-            const response = await axios.get(`${API_URL}api/auth/authenticate-from-token`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
-            dispatch(setUser(response.data));
+            localStorage.setItem('token', response.data.access_token);
+            dispatch(auth());
         } catch (e) {
-            try {
-                const newToken = await refreshToken();
-                const response = await axios.get(`${API_URL}api/auth/authenticate-from-token`, {
-                    headers: {Authorization: `Bearer ${newToken}`}
-                });
-                dispatch(setUser(response.data));
-            } catch (error) {
-                localStorage.removeItem('token');
-                console.error(error);
-            }
+            console.error(e.response?.data);
         }
     };
 };
-const refreshToken = async () => {
+
+export const auth = () => {
+    return async dispatch => {
+        const token_access = localStorage.getItem('token');
+        if (token_access === null || token_access === '') {
+            return;
+        }
+        try {
+            const response = await axios.get(`${API_URL}api/auth/authenticate-from-token`, {
+                headers: { Authorization: `Bearer ${token_access}` }
+            });
+            dispatch(setUser(response.data));
+        } catch (e) {
+            console.error(e);
+            await refreshToken(dispatch);
+        }
+    };
+};
+
+const refreshToken = async (dispatch) => {
     try {
-        const response = await axios.get(`${API_URL}api/auth/refresh-token`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('refreshToken')}` }
-        });
-        localStorage.setItem('token', response.data.access_token);
-        return response.data.access_token;
+        const response = await axios.post(`${API_URL}api/auth/refresh-token`);
+        if (response.data.access_token === undefined){
+            logout()
+            return;
+        }
+        else {
+            localStorage.setItem('token', response.data.access_token);
+            dispatch(auth());
+        }
     } catch (e) {
-        localStorage.removeItem('token')
-        localStorage.removeItem('refreshToken')
-        console.error(e);
+        logout()
     }
 };
+
 export const logout = () => {
     return async dispatch => {
         try {
-            await axios.get(`${API_URL}api/auth/logout`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
-            dispatch({type: 'LOGOUT'})
-            localStorage.removeItem('token')
-            localStorage.removeItem('refreshToken')
+            dispatch({ type: 'LOGOUT' });
+            localStorage.removeItem('token');
+            await axios.get(`${API_URL}api/auth/logout`);
+            return;
         } catch (e) {
             console.error(e);
         }
-    }
-}
+    };
+};
