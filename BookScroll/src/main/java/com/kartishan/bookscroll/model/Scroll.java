@@ -17,6 +17,7 @@ public class Scroll {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(length = 1000)
     private String name;
 
     private String cfiRange;
