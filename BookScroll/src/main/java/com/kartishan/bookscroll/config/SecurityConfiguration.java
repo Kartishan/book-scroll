@@ -32,7 +32,9 @@ public class SecurityConfiguration {
             "/api/scroll/**",
             "/api/preference/**",
             "/api/bookmarks/**",
-            "/api/recommendation/forBook/**"
+            "/api/recommendation/forBook/**",
+            "/api/file/**",
+            "/api/chapters/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

@@ -31,16 +31,6 @@ public class ManagerBookController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Книга была добавлена.");
     }
 
-    @PostMapping("/upload/{bookId}")
-    public ResponseEntity<String> uploadBookFile(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
-        boolean uploadSuccess = managerBookService.uploadBookFile(bookId, file);
-        if (uploadSuccess) {
-            return ResponseEntity.status(HttpStatus.OK).body("Файл успешно загружен для книги с ID: " + bookId);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Произошла ошибка при загрузке файла книги с ID: " + bookId);
-        }
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<String> changeBooks(@PathVariable("book") Book book){
         managerBookService.changeBookInformation(book);
