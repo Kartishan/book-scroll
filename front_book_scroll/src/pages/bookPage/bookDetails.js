@@ -74,7 +74,7 @@ const BookDetails = () => {
                     </section>
                 )}
                 {book && recommendations.length > 0 && (
-                    <BookSlider books={recommendations} categoryName="Похожие книги" />
+                    <BookSlider books={recommendations} categoryName="Для вас" />
                 )}
                 <BookComments bookId={bookId}></BookComments>
             </main>

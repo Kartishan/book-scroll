@@ -21,10 +21,12 @@ public class Hero {
 
     private String name;
     private String gender;
+    @Column(length = 1000)
     private String shortDescription;
     private String physicalDescription;
     private String education;
     private String occupation;
+    @Column(length = 1000)
     private String character;
     private boolean isMainCharacter;
 

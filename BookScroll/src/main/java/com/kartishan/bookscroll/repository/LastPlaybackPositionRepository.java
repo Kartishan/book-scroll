@@ -10,4 +10,5 @@ import java.util.UUID;
 
 public interface LastPlaybackPositionRepository extends JpaRepository<LastPlaybackPosition, UUID> {
     Optional<LastPlaybackPosition> findByUserAndBook(User user, Book book);
+    Optional<LastPlaybackPosition> findFirstByUserIdOrderByUpdatedAtDesc(UUID userId);
 }

@@ -1,0 +1,27 @@
+.modal {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center; /* Убедитесь, что это свойство работает правильно */
+    justify-content: center;
+    transform: scale(0);
+    z-index: 9999999999999999999999999999999999999999999999;
+    overflow-y: auto; /* Добавьте прокрутку на весь модаль, если содержимое выходит за пределы */
+}
+
+.modal.active {
+    transform: scale(1);
+    overflow-y: auto; /* Позволяет прокрутку, если содержимое активного модального окна выходит за пределы */
+}
+
+.modal__content {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+    max-height: 90vh; /* Ограничивает максимальную высоту, чтобы содержимое не выходило за экран */
+    overflow-y: auto; /* Добавляет прокрутку внутрь модального окна, если содержимое превышает максимальную высоту */
+}

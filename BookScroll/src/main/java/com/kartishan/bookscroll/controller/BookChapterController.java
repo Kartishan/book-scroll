@@ -2,12 +2,14 @@ package com.kartishan.bookscroll.controller;
 
 
 import com.kartishan.bookscroll.model.BookChapter;
+import com.kartishan.bookscroll.model.dto.BookChapterDTO;
 import com.kartishan.bookscroll.repository.BookChapterRepository;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.kartishan.bookscroll.service.BookChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookChapterController {
     private final BookChapterRepository bookChapterRepository;
+    private final BookChapterService bookChapterService;
 
     @GetMapping("/{bookId}/{chapterNumber}/audio-id")
     public ResponseEntity<String> getAudioFileId(@PathVariable UUID bookId, @PathVariable Long chapterNumber) {
@@ -33,6 +36,16 @@ public class BookChapterController {
         Optional<BookChapter> chapter = bookChapterRepository.findByBookIdAndNumber(bookId, chapterNumber);
         if (chapter.isPresent()) {
             return ResponseEntity.ok(chapter.get().getSummary());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{bookId}")
+    public ResponseEntity<List<BookChapterDTO>> getChapters(@PathVariable UUID bookId) {
+        List<BookChapterDTO> chaptersDTO = bookChapterService.getChaptersByBookId(bookId);
+        if (!chaptersDTO.isEmpty()) {
+            return ResponseEntity.ok(chaptersDTO);
         } else {
             return ResponseEntity.notFound().build();
         }

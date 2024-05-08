@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "../header/MyHeader.css"; // Импорт стилей
+import { Search } from 'lucide-react';
+import "../header/MyHeader.css";
 import "../../components/FiraSans.css";
-import { useNavigate } from 'react-router-dom'; // Импорт необходим для навигации
+import { useNavigate } from 'react-router-dom';
 
 const BookSearch = ({ onBookFound }) => {
-    const navigate = useNavigate(); // Добавляем хук useNavigate
+    const navigate = useNavigate();
     const [partialName, setPartialName] = useState('');
 
-    const handleSearch = async () => {
+    const handleSearch = async (e) => {
+        e.preventDefault(); // Предотвратить перезагрузку страницы
         try {
-            // Получаем книги с сервера
             const response = await axios.get(`http://localhost:8080/api/book/search/partialName/${partialName}`);
-            const books = response.data.content; // Инициализируем переменную books данными с сервера
+            const books = response.data.content;
 
             if (books && books.length === 1) {
-                onBookFound(books[0]); // Если найдена ровно одна книга
+                onBookFound(books[0]);
             } else if (books && books.length > 1) {
-                // Перенаправляем на страницу со списком книг, если результатов больше одного
                 navigate('/booksByName', { state: { books, searchQuery: partialName } });
             } else {
                 console.log('Книга не найдена');
@@ -28,16 +28,18 @@ const BookSearch = ({ onBookFound }) => {
     };
 
     return (
-        <div>
+        <form onSubmit={handleSearch} className="searchForm">
             <input
                 className="searchInput"
                 type="text"
-                placeholder="Введите название книги"
+                placeholder="Введите название"
                 value={partialName}
                 onChange={(e) => setPartialName(e.target.value)}
             />
-            <button className="searchButton" onClick={handleSearch}>Поиск</button>
-        </div>
+            <button type="submit" className="searchButton">
+                <Search className="searchIcon" />
+            </button>
+        </form>
     );
 };
 

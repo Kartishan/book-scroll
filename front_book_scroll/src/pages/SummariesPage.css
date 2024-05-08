@@ -1,0 +1,23 @@
+.summaries-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chapter-summary {
+    margin-bottom: 30px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.chapter-number {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.chapter-summary-text {
+    font-size: 1em;
+    color: #666;
+}

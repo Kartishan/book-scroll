@@ -82,7 +82,7 @@ const BookComments = ({ bookId }) => {
 
     return (
         <div>
-            <h3>Комментарии</h3>
+            <h3 style={{margin: "20px auto"}}>Комментарии</h3>
             <div className="new-comment-form">
                 <textarea
                     value={newComment}

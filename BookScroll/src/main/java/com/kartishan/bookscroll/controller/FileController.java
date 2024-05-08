@@ -5,15 +5,16 @@ import com.kartishan.bookscroll.service.GridFsService;
 import com.kartishan.bookscroll.service.ManagerBookService;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,21 +29,26 @@ public class FileController {
     private final AudioService audioService;
 
     @GetMapping("/{fileId}")
-    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileId) {
-        InputStreamResource inputStreamResource = gridFsService.downloadFileAsResource(fileId);
-
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         GridFSFile gridFSFile = gridFsService.retrieveFile(fileId);
-        String fileName = gridFSFile.getFilename();
+        if (gridFSFile == null) {
+            return ResponseEntity.notFound().build();
+        }
 
+        String fileName = gridFSFile.getFilename();
         String contentType = Optional.ofNullable(gridFSFile.getMetadata().get("_contentType").toString())
                 .orElse("application/octet-stream");
 
+        InputStreamResource resource = gridFsService.downloadFileAsResource(fileId);
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
                 .contentLength(gridFSFile.getLength())
-                .body(inputStreamResource);
+                .body(resource);
     }
+
     @PostMapping("/book/upload/{bookId}")
     public ResponseEntity<String> uploadBookFile(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
         boolean uploadSuccess = managerBookService.uploadBookFile(bookId, file);

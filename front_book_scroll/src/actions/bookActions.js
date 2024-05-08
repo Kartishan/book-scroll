@@ -76,13 +76,12 @@ export const updateBookRating = async (bookId, rating) => {
 export const createBookmark = async (bookId, cfiRange, text, comment = "") => {
     const token = localStorage.getItem('token');
     const bookmarkData = {
-        bookId: bookId,
         cfiRange: cfiRange,
         text: text,
         comment: comment
     };
     try {
-        const response = await axios.post(`${API_URL}api/bookmarks`, bookmarkData, {
+        const response = await axios.post(`${API_URL}api/new/bookmarks/${bookId}`, bookmarkData, {
             headers: {Authorization: `Bearer ${token}`}
         });
         return response.data;
@@ -95,7 +94,7 @@ export const createBookmark = async (bookId, cfiRange, text, comment = "") => {
 export const getBookmarks = async (bookId) => {
     const token = localStorage.getItem('token');
     try {
-        const response = await axios.get(`${API_URL}api/bookmarks/${bookId}`, {
+        const response = await axios.get(`${API_URL}api/new/bookmarks/${bookId}`, {
             headers: {Authorization: `Bearer ${token}`}
         });
         return response.data;
@@ -105,10 +104,10 @@ export const getBookmarks = async (bookId) => {
     }
 };
 
-export const deleteBookmark = async (bookmarkId) => {
+export const deleteBookmark = async (bookId, bookmarkId) => {
     const token = localStorage.getItem('token');
     try {
-        await axios.delete(`${API_URL}api/bookmarks/${bookmarkId}`, {
+        await axios.delete(`${API_URL}api/new/bookmarks/${bookId}/${bookmarkId}`, {
             headers: {Authorization: `Bearer ${token}`}
         });
     } catch (error) {
@@ -130,6 +129,31 @@ export const getBookSimilar = async (bookId) => {
         return response.data;
     } catch (error) {
         console.error('Ошибка при получении рекомендаций для книги:', error);
+        throw error;
+    }
+};
+
+
+export const shareBookmark = async (bookId) => {
+    const token = localStorage.getItem('token');
+    try {
+        await axios.post(`${API_URL}api/new/bookmarks/share/${bookId}`, {
+            headers: {Authorization: `Bearer ${token}`}
+        });
+    } catch (error) {
+        console.error('Ошибка при удалении закладки:', error);
+        throw error;
+    }
+};
+
+export const importBookmark = async (tokenBookMarks) => {
+    const token = localStorage.getItem('token');
+    try {
+        await axios.post(`${API_URL}api/new/bookmarks/import/${tokenBookMarks}`, {
+            headers: {Authorization: `Bearer ${token}`}
+        });
+    } catch (error) {
+        console.error('Ошибка при удалении закладки:', error);
         throw error;
     }
 };

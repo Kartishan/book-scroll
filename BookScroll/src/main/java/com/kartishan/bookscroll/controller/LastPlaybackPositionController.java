@@ -74,4 +74,24 @@ public class LastPlaybackPositionController {
 
         return ResponseEntity.ok(responseDTO);
     }
+    @GetMapping("/last")
+    public ResponseEntity<LastPlaybackPosition> getLastPlaybackPosition(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        UUID userId = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                userId = user.getId();
+            }
+        }
+
+
+        LastPlaybackPosition playbackPosition = lastPlaybackPositionService.getLastPlaybackPositionForUser(userId);
+
+        return ResponseEntity.ok(playbackPosition);
+    }
 }

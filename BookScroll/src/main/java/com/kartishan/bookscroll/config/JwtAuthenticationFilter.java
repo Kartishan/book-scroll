@@ -58,7 +58,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }catch (Exception e) {
 //            e.printStackTrace();
             if (!response.isCommitted()) {
+                logger.error("JWT gfdgdfgfddfggdfdfg verification failed: " + e.getMessage());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            }
+            else {
+                logger.error("JWT asdadsadsdas verification failed: " + e.getMessage());
+
             }
             logger.error("JWT signature verification failed: " + e.getMessage());
         }

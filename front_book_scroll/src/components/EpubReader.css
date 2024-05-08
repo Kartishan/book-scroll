@@ -26,6 +26,23 @@
     overflow-y: auto;
     position: relative;
 }
+.dictionaryModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    z-index: 1000;
+    /* Добавьте дополнительные стили по вашему вкусу */
+}
+.audioPlayerComponent {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
 
 .selectionsArea {
     position: fixed;
@@ -51,18 +68,106 @@
     margin: 0;
     font-size: 1.2em;
 }
+.ellipsisIcon {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+.ellipsisMenu {
+    position: absolute;
+    font-family: Fira Sans;
+    top: 30px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 9999999999;
+}
+.modalTwoButton-text{
+    font-size: 18px;
+    font-family: Fira Sans;
+}
+.modalTwoButton{
+    display: flex;
+    margin-top: 20px;
+    width: 70px;
+    font-size: 16px;
+    padding: 10px;
+    justify-content: center;
+    font-family: Fira Sans;
+}
+
+.selectionText {
+    font-family: Fira Sans;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.selectionComment{
+    font-family: Fira Sans;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+.selectionComment:before {
+    content: '';
+    top: 0;
+    left: 5px;
+    right: 5px;
+    height: 1px;
+    background: #ccc;
+}
+.commentDivider {
+    height: 1px;
+    background-color: #ccc; /* Цвет полоски */
+    margin: 10px 5px; /* Отступ сверху и снизу 10px, слева и справа 5px */
+}
+
+.modalTwoButton-textarea {
+    width: 300px;
+    height: 100px;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.createHighlite{
+    display: flex;
+    flex-direction:row;
+    gap: 10px;
+    justify-content: center;
+}
+.ellipsisMenu button {
+    display: block;
+    width: 100%;
+    padding: 5px 0px;
+    text-align: left;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.ellipsisMenu button:last-child {
+    border-bottom: none;
+}
 
 .selection {
+    position: relative;
     margin-top: 10px;
     padding: 5px;
     background-color: #f7f7f7;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.selectionText {
-    margin-bottom: 5px;
-    font-size: 1em;
 }
 
 .selectionButton {

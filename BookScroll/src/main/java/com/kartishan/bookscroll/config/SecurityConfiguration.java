@@ -36,7 +36,8 @@ public class SecurityConfiguration {
             "/api/file/**",
             "/api/chapters/**",
             "/api/playback/**",
-            "/api/character"
+            "/api/heroes/**",
+            "/api/new/bookmarks/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

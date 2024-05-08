@@ -18,6 +18,18 @@
 .childCommentsContainer {
     margin-left: 60px;
 }
+.commentHeader {
+    display: flex;
+    align-items: center; /* Центрируем элементы по вертикали */
+    margin-bottom: 10px; /* Отступ снизу для разделения заголовка и содержимого комментария */
+}
+.commentAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
 
 .replyForm {
     margin-left: 20px;

@@ -47,4 +47,10 @@ public class LastPlaybackPositionService {
         return lastPlaybackPositionRepository.findByUserAndBook(user, book)
                 .orElseThrow(() -> new RuntimeException("Playback position not found"));
     }
+    public LastPlaybackPosition getLastPlaybackPositionForUser(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return lastPlaybackPositionRepository.findFirstByUserIdOrderByUpdatedAtDesc(user.getId())
+                .orElseThrow(() -> new RuntimeException("Playback position not found"));
+    }
 }
