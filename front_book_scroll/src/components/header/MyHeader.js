@@ -4,13 +4,14 @@ import "../../components/FiraSans.css"
 import BookSearch from "../bookSearch/BookSearch";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import AudioPlayerComponent from "../audioplayer/AudioPlayerComponent";
 
 const MyHeader = () => {
     const navigate = useNavigate();
     const isAuth = useSelector(state => state.user.isAuth)
     const dispatch = useDispatch();
     const username = useSelector(state => state.user.currentUser?.username || '');
-
+    const bookId = "5d358ce1-5209-4b14-8224-e1334d75466a"
     const handleBookFound = (book) => {
         navigate(`/book/${book.id}`)
     };
@@ -34,6 +35,8 @@ const MyHeader = () => {
                                 <li><BookSearch onBookFound={handleBookFound}/></li>
                             </ul>
                         </div>
+                         {isAuth && bookId && <li><AudioPlayerComponent bookId={bookId}/> </li>}
+                        {/*{isAuth && <li><AudioPlayerComponent/> </li>}*/}
                         <div className="navbar-wrap">
                             <ul className="navbar-menu">
                                 {/*Добавить перед История isAuth <3*/}

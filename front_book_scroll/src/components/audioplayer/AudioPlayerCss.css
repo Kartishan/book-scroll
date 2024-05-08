@@ -1,0 +1,149 @@
+.audioPlayer {
+    border-radius: 20px;
+    max-width: 600px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.navbar-menu li .audioPlayer {
+    margin: 0;
+    padding: 0;
+}
+
+.customAudioControls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+}
+
+.controlIcon {
+    cursor: pointer;
+    color: #313131;
+    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+}
+
+.controlIcon:hover {
+    color: gray;
+}
+
+.audioPlayer audio {
+    width: 100%;
+    border-radius: 10px;
+    outline: none;
+}
+
+.chapterControls button {
+    background-color: #1D1A1A;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chapterControls button:hover {
+    background-color: gray;
+}
+
+.audioProgress {
+    width: 100px; /* Установите желаемую ширину для прогресс-бара */
+    height: 5px;
+    cursor: pointer;
+    appearance: none;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.audioProgress::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #1D1A1A;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.audioProgress::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #1D1A1A;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.audioPlayer audio {
+    width: 100%;
+    border-radius: 10px;
+    outline: none;
+}
+
+.playbackRateOptions {
+    top:70px;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction:column;
+    z-index: 10;
+}
+.bookOpen{
+    margin-top: 3px;
+}
+
+.playbackRateOptions button {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.playbackRateOptions button:hover {
+    background-color: #f0f0f0;
+}
+
+.chapterSelector {
+    position: relative; /* Для позиционирования выпадающего списка глав */
+}
+
+.currentChapter {
+    cursor: pointer;
+    display: inline-flex; /* Для выравнивания иконки с текстом */
+    align-items: center; /* Вертикальное выравнивание иконки с текстом */
+    gap: 5px; /* Расстояние между текстом и иконкой */
+}
+
+.chaptersMenu {
+    display: none; /* Скрываем по умолчанию */
+    position: absolute;
+    left: 0; /* Выравнивание по левому краю элемента текущей главы */
+    top: 100%; /* Расположение сразу под элементом текущей главы */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: max-content; /* Ширина по содержимому */
+    z-index: 100; /* Чтобы список был поверх других элементов */
+}
+
+.currentChapter:hover + .chaptersMenu,
+.chaptersMenu:hover {
+    display: block; /* Показываем при наведении */
+}
+
+.chaptersMenu div {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chaptersMenu div:hover {
+    background-color: #f0f0f0;
+}

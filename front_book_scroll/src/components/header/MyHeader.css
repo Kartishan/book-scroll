@@ -60,40 +60,58 @@
     color: #000000;
     padding: 0 30px 0 20px;
 }
-.searchInput{
-    height: 36px;
-    width: 300px;
-    border-radius: 5px;
-    border: 1px solid #D3D3D3;
-    background: #FFF;
-    margin-left: 20px;
-    padding: 0 0 0px 10px;
-    font-family: Fira Sans;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-.searchInput::placeholder {
-    color: #818181;
-    font-family: Fira Sans;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+.searchForm {
+    position: relative;
+    width: 180px; /* Меньшая начальная ширина */
+    margin-left: 10px;
+    transition: width 0.3s ease;
 }
 
-.searchInput::-ms-input-placeholder {
-    color: #818181;
-    font-family: Fira Sans;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+.searchForm {
+    position: relative;
+    width: 180px;
+    margin-left: 10px;
 }
-.searchButton{
-    margin-left: 20px;
-    padding: 0 0 10px 10px;
-    padding: 5px 5px 5px 5px;
-    border-radius: 5px;
+
+.searchInput {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px 0 10px;
+    border-radius: 18px;
+    border: 1px solid #D3D3D3;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.searchInput::placeholder {
+    color: #818181;
+}
+
+.searchInput:focus {
+    width: 300px;
+    border-color: black;
+}
+
+.searchButton {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchIcon {
+    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+}
+
+.searchForm:focus-within {
+    width: 300px;
 }
